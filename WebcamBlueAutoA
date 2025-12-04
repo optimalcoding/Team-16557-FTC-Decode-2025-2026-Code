@@ -28,12 +28,14 @@ public class BlueAutoA extends LinearOpMode {
         RIGHT,
         DETECTION_FAILED
     }
-
+    detection detectionResult = detection.DETECTION_FAILED;
 
 
 
     @Override
     public void runOpMode() throws InterruptedException {
+
+
 
         robot.init(hardwareMap);
         aprilTagWebcam.init(hardwareMap, telemetry);
@@ -47,24 +49,39 @@ public class BlueAutoA extends LinearOpMode {
         // out when the RC activity is in portrait. We do our actual image processing assuming
         // landscape orientation, though.
 
-
-        waitForStart();
-
-        while (opModeIsActive()) {
-
+        while (!isStarted()) {
             aprilTagWebcam.update();
             AprilTagDetection id20 = aprilTagWebcam.tagID(20);
             AprilTagDetection id21 = aprilTagWebcam.tagID(21);
             AprilTagDetection id22 = aprilTagWebcam.tagID(22);
 
 
+            if (id20 != null) {
+                detectionResult = detection.Obelisk_PGP;
+                aprilTagWebcam.displayDetectionTelemetry(id20);
+            } else if (id21 != null) {
+                detectionResult = detection.Obelisk_GPP;
+                aprilTagWebcam.displayDetectionTelemetry(id21);
+            } else if (id22 != null) {
+                detectionResult = detection.RIGHT;
+                aprilTagWebcam.displayDetectionTelemetry(id22);
+            } else {
+                detectionResult = detection.DETECTION_FAILED;
+            }
+            }
 
-            if (Obelisk_PGP) {
+        waitForStart();
+
+        while (opModeIsActive()) {
+
+            if (detectionResult == detection.Obelisk_PGP) {
+
                 robot.launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
             }
-
-            else {  robot.feeder.setVelocity(-FEEDER_TARGET_VELOCITY);
+            else {
+                robot.feeder.setVelocity(-FEEDER_TARGET_VELOCITY);
             }
+                
 
         /*    straight(0.5, 1500);
 
