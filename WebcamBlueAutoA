@@ -13,6 +13,9 @@ import com.qualcomm.robotcore.hardware.DcMotorEx;
 @Autonomous(name = "BLUE_2_artifact_launch")
 public class BlueAutoA extends LinearOpMode {
 
+
+    public DcMotorEx launcher;
+
     Robot robot = new Robot();
 
     final double LAUNCHER_TARGET_VELOCITY = 1250;
@@ -38,12 +41,18 @@ public class BlueAutoA extends LinearOpMode {
 
 
         robot.init(hardwareMap);
+
+
         aprilTagWebcam.init(hardwareMap, telemetry);
+
+        launcher = hardwareMap.get(DcMotorEx.class, "launcher");
+
 
         robot.frontLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.frontRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.backLeft.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
         robot.backRight.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
+        robot.launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
 
         // We set the viewport policy to optimized view so the preview doesn't appear 90 deg
         // out when the RC activity is in portrait. We do our actual image processing assuming
@@ -59,30 +68,51 @@ public class BlueAutoA extends LinearOpMode {
             if (id20 != null) {
                 detectionResult = detection.Obelisk_PGP;
                 aprilTagWebcam.displayDetectionTelemetry(id20);
+                telemetry.addData("Detection", "Obelisk_PGP");
             } else if (id21 != null) {
                 detectionResult = detection.Obelisk_GPP;
                 aprilTagWebcam.displayDetectionTelemetry(id21);
+                telemetry.addData("Detection", "Obelisk_GPP");
             } else if (id22 != null) {
                 detectionResult = detection.RIGHT;
                 aprilTagWebcam.displayDetectionTelemetry(id22);
+                telemetry.addData("Detection", "RIGHT");
             } else {
                 detectionResult = detection.DETECTION_FAILED;
+                telemetry.addData("Detection", "FAILED");
             }
+
+            telemetry.update();
             }
 
         waitForStart();
 
         while (opModeIsActive()) {
+            aprilTagWebcam.update();
+            AprilTagDetection id20 = aprilTagWebcam.tagID(20);
+            AprilTagDetection id21 = aprilTagWebcam.tagID(21);
+            AprilTagDetection id22 = aprilTagWebcam.tagID(22);
 
-            if (detectionResult == detection.Obelisk_PGP) {
-
+            if (id20 != null) {
+                detectionResult = detection.Obelisk_PGP;
+            } else if (id21 != null) {
+                detectionResult = detection.Obelisk_GPP;
+            } else if (id22 != null) {
+                detectionResult = detection.RIGHT;
+            } else {
+                detectionResult = detection.DETECTION_FAILED;
+            }
+    
+            if (detectionResult == detection.Obelisk_GPP) {
                 robot.launcher.setVelocity(LAUNCHER_TARGET_VELOCITY);
-            }
-            else {
+                telemetry.addData("Launcher", "Running");
+            } else {
                 robot.feeder.setVelocity(-FEEDER_TARGET_VELOCITY);
+                telemetry.addData("Feeder", "Running");
             }
-                
 
+            telemetry.update();
+        }
         /*    straight(0.5, 1500);
 
             sleep(500);
@@ -115,9 +145,10 @@ public class BlueAutoA extends LinearOpMode {
 
             sleep(24000);
         */
-            stop();
-        }
+
+        stop();
     }
+
 
     void straight(double power, int milliseconds) {
         robot.frontLeft.setPower(-power);
