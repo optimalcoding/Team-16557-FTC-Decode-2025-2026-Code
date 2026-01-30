@@ -34,11 +34,11 @@ public class Constants {
             .leftRearMotorName("backLeft")
             .leftFrontMotorName("frontLeft")
             .leftFrontEncoderDirection(Encoder.REVERSE)
-            .leftRearEncoderDirection(Encoder.FORWARD)
-            .rightFrontEncoderDirection(Encoder.REVERSE)
+            .leftRearEncoderDirection(Encoder.REVERSE)
+            .rightFrontEncoderDirection(Encoder.FORWARD)
             .rightRearEncoderDirection(Encoder.FORWARD)
             .forwardTicksToInches(0.00654)
-            .strafeTicksToInches(0.00705)
+            .strafeTicksToInches(0.0068)
             .turnTicksToInches(0.00654);
 
     public static Follower createFollower(HardwareMap hardwareMap) {
