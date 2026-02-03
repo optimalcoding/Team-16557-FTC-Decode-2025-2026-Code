@@ -59,6 +59,10 @@ public class Teleop extends LinearOpMode {
         robot.intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         robot.feeder.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
+        robot.frontLeft.setZeroPowerBehavior(BRAKE);
+        robot.frontRight.setZeroPowerBehavior(BRAKE);
+        robot.backLeft.setZeroPowerBehavior(BRAKE);
+        robot.backRight.setZeroPowerBehavior(BRAKE);
 
 
         robot.launcher.setMode(DcMotor.RunMode.RUN_USING_ENCODER);
@@ -126,6 +130,8 @@ public class Teleop extends LinearOpMode {
             //robot.frontRight.setPower(FrontRightVal);
             //robot.backLeft.setPower(BackLeftVal);
             //robot.backRight.setPower(BackRightVal);
+
+
 
 
             if (gamepad2.y) {
