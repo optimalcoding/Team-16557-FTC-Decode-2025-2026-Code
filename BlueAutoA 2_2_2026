@@ -90,15 +90,11 @@ public class BlueAutoA extends LinearOpMode {
 
             sleep(500);
 
-            straight(0.4,750);
+            straight(0.4,700);
 
             sleep(100);
 
-            rotate(0.4, 1700);
-
-            sleep(100);
-
-            straight(0.4,2000);
+            rotate(0.4, 1750);
 
             sleep(100);
 
@@ -112,7 +108,7 @@ public class BlueAutoA extends LinearOpMode {
 
             robot.feeder.setVelocity(-FEEDER_TARGET_VELOCITY);
 
-            straight(0.5,3000);
+            straight(0.5,1500);
 
             sleep(100);
 
@@ -124,17 +120,19 @@ public class BlueAutoA extends LinearOpMode {
 
             sleep(100);
 
-            straight(-0.5,3000);
+            straight(-0.5,  1800);
 
             sleep(100);
-            rotate(-0.4,500);
+
+            rotate(-0.4,1750);
 
             sleep(100);
 
             straight(-0.4,1000);
+
             sleep(100);
 
-            rotate(-0.4, 300);
+            rotate(-0.4, 200);
 
             sleep(100);
 
@@ -167,6 +165,10 @@ public class BlueAutoA extends LinearOpMode {
             sleep(500);
 
             robot.feeder.setVelocity(STOP_SPEED);
+
+            sleep(100);
+
+            strafeRight(0.4,1000);
 
             sleep(24000);
 
